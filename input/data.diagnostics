@@ -1,0 +1,166 @@
+# Diagnostic Package Choices
+#--------------------
+#  dumpAtLast (logical): always write output at the end of simulation (default=F)
+#  diag_mnc   (logical): write to NetCDF files (default=useMNC)
+#--for each output-stream:
+#  fileName(n) : prefix of the output file name (max 80c long) for outp.stream n
+#  frequency(n):< 0 : write snap-shot output every |frequency| seconds
+#               > 0 : write time-average output every frequency seconds
+#  timePhase(n)     : write at time = timePhase + multiple of |frequency|
+#    averagingFreq  : frequency (in s) for periodic averaging interval
+#    averagingPhase : phase     (in s) for periodic averaging interval
+#    repeatCycle    : number of averaging intervals in 1 cycle
+#  levels(:,n) : list of levels to write to file (Notes: declared as REAL)
+#                when this entry is missing, select all common levels of this list
+#  fields(:,n) : list of selected diagnostics fields (8.c) in outp.stream n
+#                (see "available_diagnostics.log" file for the full list of diags)
+#  missing_value(n) : missing value for real-type fields in output file "n"
+#  fileFlags(n)     : specific code (8c string) for output file "n"
+#--------------------
+ &DIAGNOSTICS_LIST
+# diag_mnc     = .FALSE.,
+# dumpAtLast   = .TRUE.,
+#--
+  fields(1:14,1) = 'ETAN    ','ETANSQ  ','DETADT2 ','MXLDEPTH',
+                   'oceTAUX ','oceTAUY ','TFLUX   ','SFLUX   ',
+                   'oceQnet ','oceSflux','oceFWflx','oceQsw  ',
+                   'GGL90flx','GGL90tau',
+  fileName(1) = 'Diags/surfDiag',
+  frequency(1) = 2592000.,
+#  repeatCycle(1) = 12,
+
+  fields(1:10,2) = 'UVEL    ','VVEL    ','WVEL    ',
+                   'UVELMASS','VVELMASS','WVELMASS',
+                   'PHIHYD  ','DRHODR  ','RHOAnoma','CONVADJ ',
+#                  'GM_PsiY ',
+  fileName(2) = 'Diags/dynDiag',
+  frequency(2) = 2592000.,
+#  frequency(2) = 31104000.,
+
+  fields(1:6,3)  = 'GGL90TKE','GGL90Lmx','GGL90Prl',
+                   'GGL90Kr ','GGL90ArU','GGL90ArV',
+  fileName(3) = 'Diags/oceDiag',
+#  frequency(3) = 2592000.,
+ frequency(3) = 31104000.,
+
+  fields(1:9,4)  = 'UTHMASS ','VTHMASS ','WTHMASS ',
+                   'USLTMASS','VSLTMASS','WSLTMASS',
+                   'URHOMASS','VRHOMASS','WRHOMASS',
+  fileName(4) = 'Diags/MassDiag',
+  frequency(4) = 2592000.,
+#  frequency(4) = 31104000.,
+
+  fields(1:24,5) = 'SI_Fract','SI_Thick','SI_SnowH',
+                   'SI_Tsrf ','SI_Tice1','SI_Tice2',
+                   'SI_Qice1','SI_Qice2',
+                   'SIuice  ','SIvice  ',
+                   'SIsnwPrc','SIalbedo','SIsnwAge',
+                   'SIflx2oc','SIfrw2oc','SIsaltFx',
+                   'SIflxAtm','SIfrwAtm',
+                   'ADVxSIfr','ADVxSIhi','ADVxSIhs',
+                   'ADVySIfr','ADVySIhi','ADVySIhs',
+  fileName(5) = 'Diags/seaIceDiag1',
+  frequency(5) = 2592000.,
+#  frequency(5) = -864000.,
+#averagingFreq(5) = 2592000.,
+#  repeatCycle(5) = 12,
+
+  fields(1:8,6)  = 'UVEL    ','VVEL    ','WVEL    ',
+                   'THETA   ','SALT    ','RHOAnoma',
+                   'DRHODR  ','LaTr3RHO',
+  fileName(6) = 'Diags/inst3dDiag',
+  frequency(6) = -864000.,
+#  timePhase(6) = 0.,
+
+  fields(1:9,7)  = 'ETAN    ','MXLDEPTH','SIsaltFx',
+                   'SI_Fract','SI_Thick','SI_SnowH',
+                   'oceQnet ','oceTAUX ','oceTAUY ',
+  fileName(7) = 'Diags/inst2dDiag',
+  frequency(7) = -864000.,
+
+  fields(1:4,8)  = 'LaVH3RHO','LaHs3RHO','LaPs3RHO',
+                   'LaPc3RHO',
+  fileName(8) = 'Diags/DiagLAYERS-transport',
+  frequency(8) = 2592000.,
+
+  fields(1:10,9)  = 'LaTs3RHO','LaTz3RHO',
+                    'LTha3RHO','LTza3RHO','LTto3RHO',
+                    'LaSs3RHO','LaSz3RHO',
+                    'LSha3RHO','LSza3RHO','LSto3RHO',
+  fileName(9) = 'Diags/DiagLAYERS-diapycnal',
+  frequency(9) = 2592000.,
+
+  fields(1:1,10)  = 'LaTr3RHO',
+  fileName(10) = 'Diags/DiagLAYERS-other',
+  frequency(10) = 2592000.,
+
+  fields(1,11)  = 'LaHc3RHO',
+  fileName(11) = 'Diags/DiagLAYERS-trend',
+  frequency(11) = -2592000.,
+  timePhase(11) = 0.,
+
+  fields(1:6,12) = 'THETA   ',
+                   'ADVx_TH ','ADVy_TH ','ADVr_TH ',
+                   'DFrI_TH ',
+                   'TOTTTEND',
+  fileName(12) = 'Diags/thetaDiag',
+  frequency(12) = 2592000.,
+#  fileFlags(12) = 'D       ',
+
+  fields(1:6,13) = 'SALT    ',
+                   'ADVx_SLT','ADVy_SLT','ADVr_SLT',
+                   'DFrI_SLT',
+                   'TOTSTEND',
+  fileName(13) = 'Diags/saltDiag',
+  frequency(13) = 2592000.,
+#  fileFlags(13) = 'D       ',
+#  frequency(8) = 622080000.,
+
+  fields(1:8,14) = 'SIarea  ','SIheff  ','SIhsnow ',
+                   'SIuheff ','SIvheff ','sIceLoad',
+                   'WTHMASS ','WSLTMASS',
+  levels(1:8,14) = 1,
+  frequency(14) = -864000.,
+  filename(14) = 'Diags/seaIceDiag2',
+
+ &
+
+#--------------------
+# Parameter for Diagnostics of per level statistics:
+#--------------------
+#  diagSt_mnc (logical): write stat-diags to NetCDF files (default=diag_mnc)
+#  diagSt_regMaskFile : file containing the region-mask to read-in
+#  nSetRegMskFile   : number of region-mask sets within the region-mask file
+#  set_regMask(i)   : region-mask set-index that identifies the region "i"
+#  val_regMask(i)   : region "i" identifier value in the region mask
+#--for each output-stream:
+#  stat_fName(n) : prefix of the output file name (max 80c long) for outp.stream n
+#  stat_freq(n):< 0 : write snap-shot output every |stat_freq| seconds
+#               > 0 : write time-average output every stat_freq seconds
+#  stat_phase(n)    : write at time = stat_phase + multiple of |stat_freq|
+#  stat_region(:,n) : list of "regions" (default: 1 region only=global)
+#  stat_fields(:,n) : list of selected diagnostics fields (8.c) in outp.stream n
+#                (see "available_diagnostics.log" file for the full list of diags)
+#--------------------
+ &DIAG_STATIS_PARMS
+#---
+ stat_fields(1:10,1) = 'ETAN    ','UVEL    ','VVEL    ','WVEL    ',
+                       'THETA   ','SALT    ','CONVADJ ',
+                       'DETADT2 ','MXLDEPTH','momKE   ',
+#                      'LaTr3RHO',
+  stat_fName(1) = 'Diags/dynStDiag',
+#  stat_freq(1) = 864000.,
+   stat_freq(1) = 432000.,
+ stat_fields(1:18,5) = 'SI_Fract','SI_Thick','SI_SnowH',
+                       'SI_Tsrf ','SI_Tice1','SI_Tice2',
+                       'SI_Qice1','SI_Qice2',
+                       'SIflxAtm','SIfrwAtm',
+                       'SIflx2oc','SIfrw2oc','SIsaltFx',
+                       'SIuice  ','SIvice  ',
+                       'SIsnwPrc','SIalbedo','SIsnwAge',
+#                      'SItOcMxL','SIsOcMxL',
+  stat_fName(5) = 'Diags/seaIceStDiag',
+#  stat_freq(5) = 864000.,
+   stat_freq(5) = 432000.,
+ &
+
